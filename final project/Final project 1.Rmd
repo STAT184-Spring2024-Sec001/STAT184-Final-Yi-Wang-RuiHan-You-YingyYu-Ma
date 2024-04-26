@@ -23,15 +23,15 @@ library(scales)
 ## call the data set
 
 ```{r movie}
-AnnualTicketSales <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/AnnualTicketSales.csv")
-HighestGrossers <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/HighestGrossers.csv")
-PopularCreativeTypes <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/PopularCreativeTypes.csv")
-TopDistributors <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/TopDistributors.csv")
-TopGenres <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/TopGenres.csv")
-TopGrossingRatings <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/TopGrossingRatings.csv")
-TopGrossingSources <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/TopGrossingSources.csv")
-TopProductionMethods <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/TopProductionMethods.csv")
-WideReleasesCount <- read.csv(file = "/Users/wangyi/Desktop/STAT 184/Final-Project/final project/WideReleasesCount.csv")
+AnnualTicketSales <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/AnnualTicketSales.csv")
+HighestGrossers <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/HighestGrossers.csv")
+PopularCreativeTypes <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/PopularCreativeTypes.csv")
+TopDistributors <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/TopDistributors.csv")
+TopGenres <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/TopGenres.csv")
+TopGrossingRatings <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/TopGrossingRatings.csv")
+TopGrossingSources <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/TopGrossingSources.csv")
+TopProductionMethods <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/TopProductionMethods.csv")
+WideReleasesCount <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/WideReleasesCount.csv")
 
 
 ```
@@ -58,6 +58,7 @@ ggplot(TopGenres, aes(x = "", y = `TOTAL.GROSS`, fill = GENRES)) +
   theme(plot.title = element_text(hjust = 0.5))  # Center the title
 
 ```
+
 In order to find out what kind of movie genres are more popular. I decided to first check the popularity share of different movie genres in the market. Therefore pie charts are a good choice for visualization.Pie charts show how different categories relate to each other as parts of a whole. Each slice of the pie represents a category, and its Each slice of the pie represents a category, and its size shows the proportion or percentage of that category relative to the entire dataset.In order to have a more visual view of the market share of each movie genre I chose to use different colors to represent the different genres.Based on the pie chart, the genre of Adventure have the highest market popularity. However, genres pf black comedy, documentary, and musical are the less popular.
 
 
@@ -67,11 +68,11 @@ ggplot(TopGenres, aes(x = GENRES, y = TOTAL.GROSS)) +
   geom_col(width = 0.5, fill = "skyblue", color = "black") +  # Customize bar appearance
   geom_segment(aes(x = GENRES, xend = GENRES, y = 0, yend = TOTAL.GROSS + 5),  # Add pin segments
                color = "black", size = 1) +
-  geom_point(aes(x = GENRES, y = TOTAL.GROSS + 5), shape = 18, size = 2.5, color = "black") +  # Add pin heads
-  labs(x = "Genres Of Movies", y = "Total Gross Price in billion of dollars", title = "Bar Graph Of Total Gross Price In Billion Of Dollars by Genres Of Movies") +  # Customize labels
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  # Rotate x-axis labels
-   scale_y_continuous(limits = c(2000000000, 70000000000)) +
-scale_y_continuous(labels = function(x) format(x / 1e7, scientific = FALSE, big.mark = ",", decimal.mark = ".", suffix = "B")) +
+  geom_point(aes(x = GENRES, y = TOTAL.GROSS + 5), shape = 18, size = 2.5, color = "black") +# Add pin heads
+  labs(x = "\nGenres Of Movies", y = "Total Gross Price in billion of dollars", title = "Bar Graph Of Total Gross Price In Billion Of Dollars by Genres Of Movies") +  # Customize labels
+  theme(axis.text.x = element_text(angle = 45, vjust = 1)) +  # Rotate x-axis label
+scale_y_continuous(labels = function(x) format(x / 1e9, scientific = FALSE, big.mark = ",", decimal.mark = ".", suffix = "B")) +
   theme_minimal() # Apply a minimal theme
 ```
+
 However, based on the pie chart could not generate further summary about the money making based on movie genres. Hence, I create a bar graph about total gross price in billion of dollars of genres of movies.Bar graphs are a versatile and commonly used type of chart that help to visually represent data. They can be very effective for displaying and comparing information across different categories. To more visually see the market share of movie genres, I've arranged the bar charts from largest to smallest and added black lines to better visualize specific box office amounts. For adventure genres, it has the highest gross at more than 6000 billion of dollar. Second, is action, it has almost 5000 billion of dollar. Thirdly is drama, it has about 3800 billion of dodollar as total gross. 
