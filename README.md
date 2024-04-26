@@ -28,11 +28,11 @@ What movie production method is most profitable?
 
 ## EDA
 <img width="561" alt="截屏2024-04-24 下午1 35 19" src="https://github.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/assets/119536824/7d472ec5-cb63-4af7-a616-58e3935fd730">
-Graph1 : pie chart of genres of movie
+Graph1: pie chart of genres of movie
 To find out what kind of movie genres are more popular. I decided to first check the popularity share of different movie genres in the market. Therefore pie charts are a good choice for visualization. Pie charts show how different categories relate to each other as parts of a whole. Each slice of the pie represents a category, and Each slice of the pie represents a category, and its size shows the proportion or percentage of that category relative to the entire dataset. To have a more visual view of the market share of each movie genre I chose to use different colors to represent the different genres. Based on the pie chart, the genre of Adventure has the highest market popularity. However, genres of black comedy, documentary, and musical are the less popular.
 
 <img width="864" alt="截屏2024-04-25 下午10 03 39" src="https://github.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/assets/119536824/ee8e4d53-b467-4ef7-a179-9093f6eb2756">
-Graph2 : The total gross of movies in billion of dollars by genres of movie.
+Graph 2: The total gross of movies in billions of dollars by genre of movie.
 However, based on the pie chart could not generate further summary about the money making based on movie genres. Hence, I create a bar graph about the total gross price in billions of dollars of genres of movies. Bar graphs are a versatile and commonly used type of chart that helps to visually represent data. They can be very effective for displaying and comparing information across different categories. To more visually see the market share of movie genres, I've arranged the bar charts from largest to smallest and added black lines to better visualize specific box office amounts. For adventure genres, it has the highest gross at more than 6000 billion dollars. Second, is action, which has almost 5000 billion dollars. Thirdly is drama, which has about 3800 billion dollars as a total gross. 
 
 ## RESULTS
