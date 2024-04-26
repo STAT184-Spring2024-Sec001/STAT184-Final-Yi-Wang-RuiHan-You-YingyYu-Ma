@@ -2,8 +2,11 @@
 title: "STAT 184 Final Project"
 author: "Yi Wang, Yingyu Ma, Ruihan You"
 output:
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
   pdf_document: default
-  html_document: default
 date: "2024-04-12"
 ---
 
@@ -17,7 +20,9 @@ library(ggplot2)  # For data visualization
 library(tidyverse)
 library(tinytex)
 library(scales)
-
+library(knitr)
+library(janitor)
+library(kableExtra)
 ```
 
 
@@ -43,19 +48,19 @@ The dataset presented here offers a comprehensive analysis of the theatrical mar
 
 # Research Questions 
 
-General question:
+General question:  
 What make the movie earning more money? 
 
-To be more specific:
-1. What genres of movies are popular and earning more money?\n
-2. Does more movie releases leads to a higher total gross? Of the “Big six” movie studios, Walt Disney, Warner Bros., Paramount, 20th century fox, Universal, and Sony, which has a higher number of wide release movie (when a film plays in most cinemas across a country at the same time)?
+To be more specific:  
+1. What genres of movies are popular and earning more money?  
+2. Does more movie releases leads to a higher total gross? Of the “Big six” movie studios, Walt Disney, Warner Bros., Paramount, 20th century fox, Universal, and Sony, which has a higher number of wide release movie (when a film plays in most cinemas across a country at the same time)?  
 3. What movie production method is most profitable?
 
 
 # Research Question 1
 
 ## Some EDA of Q1
-##Most popular Geners basde on Earning
+##Most popular Geners basde on Earning  
 ##arrange from the highest to the lowest
 ```{r}
 # Data preparation
@@ -93,13 +98,18 @@ scale_y_continuous(labels = function(x) format(x / 1e9, scientific = FALSE, big.
 
 However, based on the pie chart could not generate further summary about the money making based on movie genres. Hence, I create a bar graph about total gross price in billion of dollars of genres of movies.Bar graphs are a versatile and commonly used type of chart that help to visually represent data. They can be very effective for displaying and comparing information across different categories. To more visually see the market share of movie genres, I've arranged the bar charts from largest to smallest and added black lines to better visualize specific box office amounts. For adventure genres, it has the highest gross at more than 6000 billion of dollar. Second, is action, it has almost 5000 billion of dollar. Thirdly is drama, it has about 3800 billion of dollar as total gross. 
 
+
 # Research Question 2
+
+Does more movie releases leads to a higher total gross? Of the “Big six” movie studios, Walt Disney, Warner Bros., Paramount, 20th century fox, Universal, and Sony, which has a higher number of wide release movie (when a film plays in most cinemas across a country at the same time)?  
 
 ## EDA - Top Distributors
 
-For the second research question, we want to explore the number of releases of the big six studios and their total gross. Some attributes we are focusing on are:
-MOVIES - number of movie release
-
+For the second research question, we want to explore the number of releases of the big six studios and their total gross. Some attributes we are focusing on are:  
+Movies - number of movie release 
+Distributors  
+Total Gross  
+Average Gross  
 
 ```{r, message=FALSE, warning=FALSE}
 TopDistributors <- TopDistributors[-c(7,8,9,10),] # delete the rows that will not be focused on for this research
@@ -149,20 +159,70 @@ ggplot(TopDistributors) +
 
 ```
 
+## Analysis
+
+Here we can see that universal, paramount, and 20th century fox are close on their average gross. Walt Disney has the highest total gross, as well as the highest average gross. And compare to Disney, Warner Bros. has a much greater number of movie release, but lower total gross, and the average gross is the second lowest one. So there we can see that more movie release does not necessarily leads to higher gross, it can be related to other factors.
+
+## EDA - Wide Release
+
+Then we want to compare the number of wide release movie between different distributors. Wide release means a movie play at 600 or more theaters at the same time. The attributes we are focusing on are:  
+Distributors  
+Wide Release  
+Total Release  
+Percentage - the percent of wide release movies out of the total number of movie release
+
+```{r message=FALSE}
+# change the column names 
+colnames(WideReleasesCount) = gsub(pattern = "[[:punct:]]", replacement = " ", x = colnames(WideReleasesCount))
+colnames(WideReleasesCount)[4] <- "20TH CENTURY FOX"
+
+WideRelease_FreqTable <- WideReleasesCount[,-c(8,10)] # delete other companies
+
+# covert of number to percentage
+summary <- WideRelease_FreqTable %>% 
+  adorn_totals(where = c("row", "col") ) %>%
+  adorn_percentages(denominator = "all") %>%
+  adorn_pct_formatting(digits = 2) %>%
+  adorn_title(
+    placement = "combined",
+    row_name = "Year",
+    col_name = "Company")
+# create format of the table
+format <- attr(summary, "core") %>%
+  adorn_totals(where = c("row", "col")) %>%
+  mutate(
+    across(.cols = where(is.numeric),
+           .fns = ~format(.x, big.mark = ","))
+  )
+# combine the number and percentage into the frequency table
+wideReleaseFreqTab <- summary %>%
+  adorn_ns(position = "front", ns = format)
+# present with striped style
+wideReleaseFreqTab %>%
+  kable(
+    caption = "<center>Year and Number of Wide Release for Company<center>",
+    booktabs = TRUE,
+    align = c("c", rep("c", 6))
+  ) %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped"),
+    font_size = 12
+  )
 
 
-```{r eval=FALSE, message=FALSE, include=FALSE}
-wideRelease <- wideRelease[,-c(8,9,10)] # delete other companies
+WideReleasesCount <- WideReleasesCount[,-c(8,9,10)] # delete other companies
 
-wideRelease_long <- wideRelease %>% # convert to the Year, Company, Release form 
-  pivot_longer(!`YEAR`, names_to = c("Company"), values_to = "Release")
+WideRelease_long <- WideReleasesCount %>% # convert to the Year, Company, Release form 
+  pivot_longer(!YEAR, names_to = c("Company"), values_to = "Release")
 
-wideRelease_totalNumber <- wideRelease_long %>% # summarize the total number of wide release for each company from 1995 to 2021
+wideRelease_totalNumber <- WideRelease_long %>% # summarize the total number of wide release for each company from 1995 to 2021
   group_by(Company) %>% 
   summarise(`Wide Release` = sum(Release))
+
+
 wideRelease_totalNumber$Company <- str_to_title(wideRelease_totalNumber$Company) # change the format of company name 
 wideRelease_totalNumber$Company[6] <- "Warner Bros."
-wideRelease_totalNumber$`Total Release` <- topDistributors$MOVIES[match(wideRelease_totalNumber$Company, topDistributors$DISTRIBUTORS)] # add the total number of release from the top Distributor data set 
+wideRelease_totalNumber$`Total Release` <- TopDistributors$MOVIES[match(wideRelease_totalNumber$Company, TopDistributors$DISTRIBUTORS)] # add the total number of release from the top Distributor data set 
 
 wideRelease_totalNumber <- wideRelease_totalNumber %>% # calculate the percentage of wide release movie out of total release
   mutate(Percentage = `Wide Release`/`Total Release`)
@@ -180,48 +240,9 @@ ggplot(wideRelease_totalNumber) +
     hjust = 0.5)
   )
 
-wideRelease <- read_csv("C:/Users/yingy/Downloads/archive/WideReleasesCount.csv") # load data set into environment
-wideRelease <- wideRelease[,-c(8,10)] # delete other companies
-
-summary <- wideRelease %>% 
-  adorn_totals(where = c("row", "col") ) %>%
-  adorn_percentages(denominator = "all") %>%
-  adorn_pct_formatting(digits = 2) %>%
-  adorn_title(
-    placement = "combined",
-    row_name = "Year",
-    col_name = "Company")
-
-format <- attr(summary, "core") %>%
-  adorn_totals(where = c("row", "col")) %>%
-  mutate(
-    across(.cols = where(is.numeric),
-           .fns = ~format(.x, big.mark = ","))
-  )
-wideReleaseFreqTab <- summary %>%
-  adorn_ns(position = "front", ns = format)
-
-
-wideReleaseFreqTab %>%
-  kable(
-    caption = "<center>Year and Number of Wide Release for Company<center>",
-    booktabs = TRUE,
-    align = c("c", rep("c", 6))
-  ) %>%
-  kableExtra::kable_styling(
-    bootstrap_options = c("striped"),
-    font_size = 12
-  )
-
-ggplot(wideRelease_long) +
-  aes(x = YEAR, y = Release) +
-  labs(title = "Year vs. Release") +
-  xlab("\nYear") +
-  geom_line(colour = "#112446") +
-  theme_light() +
-  theme(plot.title = element_text(size = 15L,
-        face = "italic",
-        hjust = 0.5)) +
-  facet_grid(vars(), vars(Company))
 
 ```
+
+## Analysis
+
+Based on the frequency table, we can see that the Hollywood market is very centralized, studios other than the Big Six only accounting for 25% of the total number. And for the big six movie studios, Warner Bros., again, has the highest number of wide release movie. But when we compare the number of wide release and total release, we see that Universal Pictures actually has the largest percentage, over 80%, which means that the majority of their films are widely released across the country.
