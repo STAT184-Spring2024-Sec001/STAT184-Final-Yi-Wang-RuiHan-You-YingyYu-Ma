@@ -3,7 +3,7 @@ title: "STAT 184 Final Project"
 author: "Yi Wang, Yingyu Ma, Ruihan You"
 output:
   html_document:
-    code_folding: hide
+    code_folding: show
     toc: true
     toc_float: true
   pdf_document: default
@@ -11,7 +11,7 @@ date: "2024-04-12"
 ---
 
 ## load the library 
-```{r setup, include=FALSE}
+```{r setup, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Load necessary libraries
 library(readr)  # For data import
@@ -39,12 +39,22 @@ TopGrossingSources <- read.csv(file = "https://raw.githubusercontent.com/STAT184
 TopProductionMethods <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/TopProductionMethods.csv")
 WideReleasesCount <- read.csv(file = "https://raw.githubusercontent.com/STAT184-Spring2024-Sec001/STAT184-Final-Yi-Wang-RuiHan-You-YingyYu-Ma/main/final%20project/WideReleasesCount.csv")
 
-
 ```
 
 # Introduction
 
 The dataset presented here offers a comprehensive analysis of the theatrical market performance of movies released since 1995 within the North American movie region, encompassing the United States, Canada, Puerto Rico, and Guam. Compiled from The Numbers' unique categorization system, this dataset provides valuable insights into movie attributes crucial for market understanding.
+
+Market Analysis Criteria
+Movies in this dataset are categorized based on six key attributes: Creative type (including factual, contemporary fiction, fantasy, etc.), Source (such as book adaptations, original screenplays, etc.), Genre (spanning drama, horror, documentary, and more), MPAA rating, Production method (including live action, digital animation, etc.), and Distributor.
+
+Fair Comparison of Movies
+To ensure fairness in comparisons across different years, all rankings are rooted in ticket sales data, calculated using average ticket prices as reported annually by the MPAA in their state of the industry reports.
+
+Data Source
+This dataset is sourced from The Numbers website, focusing specifically on domestic theatrical market performance. The Numbers' theatrical market pages concentrate on the North American movie region, ensuring a detailed analysis of this specific market.
+For further details and a deeper exploration of this dataset, please visit The Numbers Market Analysis.
+
 
 # Research Questions 
 
@@ -83,7 +93,7 @@ ggplot(TopGenres, aes(x = "", y = `TOTAL.GROSS`, fill = GENRES)) +
 In order to find out what kind of movie genres are more popular. I decided to first check the popularity share of different movie genres in the market. Therefore pie charts are a good choice for visualization.Pie charts show how different categories relate to each other as parts of a whole. Each slice of the pie represents a category, and its Each slice of the pie represents a category, and its size shows the proportion or percentage of that category relative to the entire dataset.In order to have a more visual view of the market share of each movie genre I chose to use different colors to represent the different genres.Based on the pie chart, the genre of Adventure have the highest market popularity. However, genres pf black comedy, documentary, and musical are the less popular.
 
 
-```{r}
+```{r, warning=FALSE}
 # using ggplot to explore the specific detail of total gross of genres
 ggplot(TopGenres, aes(x = GENRES, y = TOTAL.GROSS)) +
   geom_col(width = 0.5, fill = "skyblue", color = "black") +  # Customize bar appearance
@@ -96,7 +106,7 @@ scale_y_continuous(labels = function(x) format(x / 1e9, scientific = FALSE, big.
   theme_minimal() # Apply a minimal theme
 ```
 
-However, based on the pie chart could not generate further summary about the money making based on movie genres. Hence, I create a bar graph about total gross price in billion of dollars of genres of movies.Bar graphs are a versatile and commonly used type of chart that help to visually represent data. They can be very effective for displaying and comparing information across different categories. To more visually see the market share of movie genres, I've arranged the bar charts from largest to smallest and added black lines to better visualize specific box office amounts. For adventure genres, it has the highest gross at more than 6000 billion of dollar. Second, is action, it has almost 5000 billion of dollar. Thirdly is drama, it has about 3800 billion of dollar as total gross. 
+However, based on the pie chart could not generate further summary about the money making based on movie genres. Hence, I create a bar graph about total gross price in billion of dollars of genres of movies.Bar graphs are a versatile and commonly used type of chart that help to visually represent data. They can be very effective for displaying and comparing information across different categories. To more visually see the market share of movie genres, I've arranged the bar charts from largest to smallest and added black lines to better visualize specific box office amounts. For adventure genres, it has the highest gross at more than 6000 billion of dollar. Second, is action, it has almost 50 billion of dollar. Thirdly is drama, it has about 38 billion of dollar as total gross. 
 
 
 # Research Question 2
@@ -161,7 +171,8 @@ ggplot(TopDistributors) +
 
 ## Analysis
 
-Here we can see that universal, paramount, and 20th century fox are close on their average gross. Walt Disney has the highest total gross, as well as the highest average gross. And compare to Disney, Warner Bros. has a much greater number of movie release, but lower total gross, and the average gross is the second lowest one. So there we can see that more movie release does not necessarily leads to higher gross, it can be related to other factors.
+In the scatter plot, we can see that universal, paramount, and 20th century fox are close on their average gross, since the company with more movie releases has a higher total gross. Walt Disney has the highest total gross among those six companies, as well as the highest average gross. And compare to Disney, Warner Bros. has a much greater number of movie release, but lower total gross, and the average gross is the second lowest one. So there we can see that more movie release does not necessarily leads to higher gross, it can be related to other factors.
+
 
 ## EDA - Wide Release
 
@@ -245,4 +256,11 @@ ggplot(wideRelease_totalNumber) +
 
 ## Analysis
 
-Based on the frequency table, we can see that the Hollywood market is very centralized, studios other than the Big Six only accounting for 25% of the total number. And for the big six movie studios, Warner Bros., again, has the highest number of wide release movie. But when we compare the number of wide release and total release, we see that Universal Pictures actually has the largest percentage, over 80%, which means that the majority of their films are widely released across the country.
+Based on the frequency table, we can see that the Hollywood market is very centralized, studios other than the Big Six only accounting for 25% of the total number. The major six studios are taking the rest 75%. And for the big six movie studios, Warner Bros., again, has the highest number of wide release movie. But when we compare the number of wide release and total release, we see that Universal Pictures actually has the largest percentage, over 80%, which we can say that the majority of their films are widely released across the country.
+
+
+# Conclusion
+
+According to our EDA we made a bold assumption that adventure live animation produced by Disney World will make most profits money. But as a rigorous statistical scientist, we can't make judgments and predictions just based on charts and graphs, it's very uncritical. Hence, if more accurate predictions are needed, we need to build specific models to check which attribute is highly impact with the movie make money. However, due to the limit of knowledge and data support could have to stop at this point. 
+
+
